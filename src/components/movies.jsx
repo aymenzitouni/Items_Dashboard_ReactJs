@@ -11,6 +11,14 @@ class Movies extends Component {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
     this.setState({ movies });
   };
+
+  handleLike = (movie) => {
+    let movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index] };
+    movies[index].liked = !movies[index].liked;
+    this.setState({ movies });
+  };
   render() {
     if (this.state.movies.length === 0) {
       return <p>there is no movies in the database</p>;
@@ -26,6 +34,7 @@ class Movies extends Component {
               <th scope="col">Stock</th>
               <th scope="col">Rate</th>
               <th scope="col"></th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -34,6 +43,7 @@ class Movies extends Component {
                 movie={movie}
                 key={movie._id}
                 onDelete={this.handleDelete}
+                onLikeToggle={this.handleLike}
               />
             ))}
           </tbody>
