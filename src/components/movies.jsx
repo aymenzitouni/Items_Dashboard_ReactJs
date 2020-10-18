@@ -3,15 +3,23 @@ import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import Movie from "./movie";
 import Pagination from "./pagination";
+import ListGenre from "./listGenre";
+
 import paginate from "../utils/paginate";
 
 class Movies extends Component {
   state = {
-    movies: getMovies(),
+    movies: [],
     pageSize: 4,
     currentPage: 1,
-    genres: getGenres(),
+    genres: [],
+    selectedGenre: null,
   };
+
+  componentDidMount() {
+    const genres = [{ name: "All" }, ...getGenres()];
+    this.setState({ movies: getMovies(), genres });
+  }
 
   handleDelete = (movie) => {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
@@ -39,13 +47,22 @@ class Movies extends Component {
   //     this.setState({ movies });
   //   }
   // };
+
+  handleGenreSelect = (genre) => {
+    this.setState({ selectedGenre: genre, currentPage: 1 });
+  };
   render() {
     if (this.state.movies.length === 0) {
       return <p>there is no movies in the database</p>;
     }
-
+    const filtred =
+      this.state.selectedGenre && this.state.selectedGenre._id
+        ? this.state.movies.filter(
+            (movie) => movie.genre._id === this.state.selectedGenre._id
+          )
+        : this.state.movies;
     const movies = paginate(
-      this.state.movies,
+      filtred,
       this.state.currentPage,
       this.state.pageSize
     );
@@ -53,19 +70,11 @@ class Movies extends Component {
       <div className="container mt-4">
         <div className="row">
           <div className="col-3 mt-5">
-            <ul className="list-group">
-              <li className="list-group-item active">All</li>
-
-              {this.state.genres.map((genre) => (
-                <li
-                  key={genre._id}
-                  className="list-group-item"
-                  onClick={() => this.handleFilterGenre(genre)}
-                >
-                  {genre.name}
-                </li>
-              ))}
-            </ul>
+            <ListGenre
+              selectedGenre={this.state.selectedGenre}
+              onGenreSelect={this.handleGenreSelect}
+              genres={this.state.genres}
+            />
           </div>
           <div className="col-9">
             <p>there is {this.state.movies.length} in the database</p>
@@ -93,7 +102,7 @@ class Movies extends Component {
             </table>
 
             <Pagination
-              itemsCount={this.state.movies.length}
+              itemsCount={filtred.length}
               pageSize={this.state.pageSize}
               currentPage={this.state.currentPage}
               onPageChange={this.handlePageChange}
