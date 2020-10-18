@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
-import Movie from "./movie";
+import MoviesTable from "./moviesTable";
 import Pagination from "./pagination";
 import ListGenre from "./listGenre";
-
 import paginate from "../utils/paginate";
-
+import _ from "loadsh";
 class Movies extends Component {
   state = {
     movies: [],
@@ -14,10 +13,11 @@ class Movies extends Component {
     currentPage: 1,
     genres: [],
     selectedGenre: null,
+    sortColumn: { path: "title", order: "asc" },
   };
 
   componentDidMount() {
-    const genres = [{ name: "All" }, ...getGenres()];
+    const genres = [{ _id: "", name: "All" }, ...getGenres()];
     this.setState({ movies: getMovies(), genres });
   }
 
@@ -51,6 +51,10 @@ class Movies extends Component {
   handleGenreSelect = (genre) => {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
+
+  handleSort = (sortColumn) => {
+    this.setState({ sortColumn });
+  };
   render() {
     if (this.state.movies.length === 0) {
       return <p>there is no movies in the database</p>;
@@ -61,8 +65,13 @@ class Movies extends Component {
             (movie) => movie.genre._id === this.state.selectedGenre._id
           )
         : this.state.movies;
-    const movies = paginate(
+    const sorted = _.orderBy(
       filtred,
+      [this.state.sortColumn.path],
+      [this.state.sortColumn.order]
+    );
+    const movies = paginate(
+      sorted,
       this.state.currentPage,
       this.state.pageSize
     );
@@ -78,29 +87,13 @@ class Movies extends Component {
           </div>
           <div className="col-9">
             <p>there is {this.state.movies.length} in the database</p>
-            <table className="table table-hover ">
-              <thead>
-                <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Genre</th>
-                  <th scope="col">Stock</th>
-                  <th scope="col">Rate</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {movies.map((movie) => (
-                  <Movie
-                    movie={movie}
-                    key={movie._id}
-                    onDelete={this.handleDelete}
-                    onLikeToggle={this.handleLike}
-                  />
-                ))}
-              </tbody>
-            </table>
-
+            <MoviesTable
+              movies={movies}
+              sortColumn={this.state.sortColumn}
+              onDelete={this.handleDelete}
+              onLikeToggle={this.handleLike}
+              onSort={this.handleSort}
+            />
             <Pagination
               itemsCount={filtred.length}
               pageSize={this.state.pageSize}
