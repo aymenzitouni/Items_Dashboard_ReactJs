@@ -10,34 +10,13 @@ class Movie extends Component {
     const { columns, movie } = this.props;
 
     return (
-      <tr>
+      <tr key={movie._id}>
         {columns.map((column) => (
-          <td>{this.renderCell(movie, column)}</td>
+          <td key={movie._id + (column.path || column.key)}>
+            {this.renderCell(movie, column)}
+          </td>
         ))}
-        <td></td>
       </tr>
-      // <tr>
-      //   <td>{title}</td>
-      //   <td>{genre.name}</td>
-      //   <td>{numberInStock}</td>
-      //   <td>{dailyRentalRate}</td>
-      //   <td>
-      //     <LikeButton
-      //       liked={liked}
-      //       onClick={() => this.props.onLikeToggle(this.props.movie)}
-      //     />
-      //   </td>
-      //   <td>
-      //     <button
-      //       className="btn btn-danger"
-      //       onClick={() => this.props.onDelete(this.props.movie)}
-      //     >
-      //   //       Delete
-      //   //     </button>
-      //     </td>
-      //   </tr>
-      // );
-      // }
     );
   }
 }
