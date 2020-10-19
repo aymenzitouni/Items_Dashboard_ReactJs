@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Movie from "./movie";
-import TableHead from "./tableHead";
+import Table from "./table";
 import LikeButton from "./likeButton";
 
 class MoviesTable extends Component {
@@ -33,20 +32,14 @@ class MoviesTable extends Component {
       },
     ];
     return (
-      <table className="table table-hover ">
-        <TableHead onSort={onSort} columns={columns} sortColumn={sortColumn} />
-        <tbody>
-          {movies.map((movie) => (
-            <Movie
-              movie={movie}
-              key={movie._id}
-              onDelete={onDelete}
-              onLikeToggle={onLikeToggle}
-              columns={columns}
-            />
-          ))}
-        </tbody>
-      </table>
+      <Table
+        columns={columns}
+        movies={movies}
+        sortColumn={sortColumn}
+        onSort={onSort}
+        onDelete={onDelete}
+        onLikeToggle={onLikeToggle}
+      />
     );
   }
 }
