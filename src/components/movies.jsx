@@ -85,8 +85,10 @@ class Movies extends Component {
               genres={this.state.genres}
             />
           </div>
-          <div className="col-9">
-            <p>there is {this.state.movies.length} in the database</p>
+          <div className="col-9 mt-5">
+            <p className="alert alert-primary">
+              there is {this.state.movies.length} in the database
+            </p>
             <MoviesTable
               movies={movies}
               sortColumn={this.state.sortColumn}
