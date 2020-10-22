@@ -1,15 +1,47 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import Movies from "./movies";
+import Customers from "./customers";
+import Rentals from "./rentals";
 
-const Navbar = props => {
+const Navbar = (props) => {
   return (
-    <div class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <NavLink className="navbar-brand" to="/">
         Navbar
-      </a>
-      <span className="badge badge-pill badge-primary">
-        {props.totalCounters}
-      </span>
-    </div>
+      </NavLink>
+
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav">
+          <li className="nav-item active">
+            <NavLink className="nav-link" to="/movies">
+              movies{" "}
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/customers">
+              Customers
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="rentals">
+              Rentals
+            </NavLink>
+          </li>
+        </ul>
+      </div>
+    </nav>
   );
 };
 
