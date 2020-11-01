@@ -13,7 +13,7 @@ class RegisterForm extends Form {
     console.log("submmited");
     const response = await register(this.state.data);
     localStorage.setItem("token", response.headers["x-auth-token"]);
-    this.props.history.push("/movies");
+    window.location = "/";
   };
   render() {
     const { data, errors } = this.state;

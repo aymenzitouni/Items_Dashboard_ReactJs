@@ -11,6 +11,7 @@
     "bootstrap": "^4.5.2",
     "font-awesome": "^4.7.0",
     "joi-browser": "^13.4.0",
+    "jwt-decode": "^2.2.0",
     "loadsh": "0.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
