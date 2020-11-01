@@ -1,21 +1,8 @@
 import React, { Component } from "react";
 import Form from "./form";
 import Joi from "joi-browser";
-import { getGenres } from "../services/fakeGenreService";
-import { getMovie, saveMovie } from "../services/fakeMovieService";
-// const MovieForm = (props) => {
-//   return (
-//     <div>
-//       <h1>MovieForm {props.match.params.id}</h1>
-//       <button
-//         className="btn btn-primary"
-//         onClick={() => props.history.push("/movies")}
-//       >
-//         Save
-//       </button>
-//     </div>
-//   );
-// };
+import { getGenres } from "../services/genreService";
+import { getMovie, saveMovie } from "../services/movieService";
 
 class MovieForm extends Form {
   state = {
@@ -58,7 +45,6 @@ class MovieForm extends Form {
 
   async componentDidMount() {
     await this.populateGenres();
-
     await this.populateMovie();
   }
 
