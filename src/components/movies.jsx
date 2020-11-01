@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { toast } from "react-toastify";
-import { getMovies, deleteMovie } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
-import MoviesTable from "./moviesTable";
-import Pagination from "./pagination";
-import ListGenre from "./listGenre";
+import { getMovies, deleteMovie } from "../services/movieService";
+import { getGenres } from "../services/genreService";
+import MoviesTable from "./common/moviesTable";
+import Pagination from "./common/pagination";
+import ListGenre from "./common/listGenre";
 import paginate from "../utils/paginate";
 import _ from "loadsh";
-import SearchBox from "./searchBox";
+import SearchBox from "./common/searchBox";
 class Movies extends Component {
   state = {
     movies: [],
