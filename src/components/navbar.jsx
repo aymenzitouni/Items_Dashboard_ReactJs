@@ -61,7 +61,6 @@ const Navbar = ({ user }) => {
                 <NavLink className="nav-link" to="/logout">
                   logout
                 </NavLink>
-                )
               </li>
             </React.Fragment>
           )}
