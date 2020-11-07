@@ -4,24 +4,22 @@ import Table from "./table";
 import LikeButton from "./likeButton";
 import { getCurrentUser } from "../../services/authService";
 
-class MoviesTable extends Component {
+class ItemsTable extends Component {
   columns = [
     {
       path: "title",
       label: "Title",
-      content: (movie) => (
-        <Link to={"/movies/" + movie._id}>{movie.title}</Link>
-      ),
+      content: (item) => <Link to={"/items/" + item._id}>{item.title}</Link>,
     },
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Rate" },
     {
       key: "like",
-      content: (movie) => (
+      content: (item) => (
         <LikeButton
-          liked={movie.liked}
-          onClick={() => this.props.onLikeToggle(movie)}
+          liked={item.liked}
+          onClick={() => this.props.onLikeToggle(item)}
         />
       ),
     },
@@ -29,10 +27,10 @@ class MoviesTable extends Component {
 
   deleteColumn = {
     key: "delete",
-    content: (movie) => (
+    content: (item) => (
       <button
         className="btn btn-danger"
-        onClick={() => this.props.onDelete(movie)}
+        onClick={() => this.props.onDelete(item)}
       >
         Delete
       </button>
@@ -44,12 +42,12 @@ class MoviesTable extends Component {
     if (user && user.isAdmin) this.columns.push(this.deleteColumn);
   }
   render() {
-    const { movies, onDelete, onLikeToggle, onSort, sortColumn } = this.props;
+    const { items, onDelete, onLikeToggle, onSort, sortColumn } = this.props;
 
     return (
       <Table
         columns={this.columns}
-        movies={movies}
+        items={items}
         sortColumn={sortColumn}
         onSort={onSort}
         onDelete={onDelete}
@@ -59,4 +57,4 @@ class MoviesTable extends Component {
   }
 }
 
-export default MoviesTable;
+export default ItemsTable;

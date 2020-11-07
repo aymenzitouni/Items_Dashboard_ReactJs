@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
 import { getGenres } from "../services/genreService";
-import { getMovie, saveMovie } from "../services/movieService";
+import { getItem, saveItem } from "../services/itemService";
 
-class MovieForm extends Form {
+class ItemForm extends Form {
   state = {
     data: { title: "", genreId: "", numberInStock: "", dailyRentalRate: "" },
     genres: [],
@@ -30,12 +30,12 @@ class MovieForm extends Form {
     this.setState({ genres });
   }
 
-  async populateMovie() {
+  async populateItem() {
     try {
-      const movieId = this.props.match.params._id;
-      if (movieId === "new") return;
-      const { data: movie } = await getMovie(movieId);
-      this.setState({ data: this.mapToViewModel(movie) });
+      const itemId = this.props.match.params._id;
+      if (itemId === "new") return;
+      const { data: item } = await getItem(itemId);
+      this.setState({ data: this.mapToViewModel(item) });
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
         this.props.history.replace("/not-found");
@@ -45,28 +45,28 @@ class MovieForm extends Form {
 
   async componentDidMount() {
     await this.populateGenres();
-    await this.populateMovie();
+    await this.populateItem();
   }
 
-  mapToViewModel(movie) {
+  mapToViewModel(item) {
     return {
-      _id: movie._id,
-      title: movie.title,
-      genreId: movie.genre._id,
-      numberInStock: movie.numberInStock,
-      dailyRentalRate: movie.dailyRentalRate,
+      _id: item._id,
+      title: item.title,
+      genreId: item.genre._id,
+      numberInStock: item.numberInStock,
+      dailyRentalRate: item.dailyRentalRate,
     };
   }
 
   doSubmit = async () => {
-    const err = await saveMovie(this.state.data);
+    const err = await saveItem(this.state.data);
 
-    this.props.history.push("/movies");
+    this.props.history.push("/items");
   };
   render() {
     return (
       <div>
-        <h1>Movie Form</h1>
+        <h1>item Form</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title")}
           {this.renderSelect("genreId", "Genre", this.state.genres)}
@@ -79,4 +79,4 @@ class MovieForm extends Form {
   }
 }
 
-export default MovieForm;
+export default ItemForm;

@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import jwtDecode from "jwt-decode";
-import Movies from "./components/movies";
+import Items from "./components/items";
 import Navbar from "./components/navbar";
-import Home from "./components/home";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/notFound";
-import MovieForm from "./components/movieForm";
+import ItemForm from "./components/itemForm";
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,21 +33,21 @@ class App extends Component {
           <Switch>
             <ProtectedRoute
               user={user}
-              path="/movies/:_id"
-              component={MovieForm}
+              path="/items/:_id"
+              component={ItemForm}
             />
             <Route
-              path="/movies"
-              render={(props) => <Movies {...props} user={user} />}
+              path="/items"
+              render={(props) => <Items {...props} user={user} />}
             />
-            <ProtectedRoute path="/movies/new" component={MovieForm} />
+            <ProtectedRoute path="/items/new" component={ItemForm} />
             <ProtectedRoute path="/customers" component={Customers} />
             <ProtectedRoute path="/rentals" component={Rentals} />
             <Route path="/login" component={LoginForm} />
             <Route path="/register" component={RegisterForm} />
             <Route path="/logout" component={Logout} />
             <Route path="/not_Found" component={NotFound} />
-            <Redirect from="/" to="/movies"></Redirect>
+            <Redirect from="/" to="/items"></Redirect>
             <Redirect to="/not_found"></Redirect>
           </Switch>
         </main>

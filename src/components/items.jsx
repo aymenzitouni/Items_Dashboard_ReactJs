@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { toast } from "react-toastify";
-import { getMovies, deleteMovie } from "../services/movieService";
+import { getItems, deleteItem } from "../services/itemService";
 import { getGenres } from "../services/genreService";
-import MoviesTable from "./common/moviesTable";
+import ItemsTable from "./common/itemsTable";
 import Pagination from "./common/pagination";
 import ListGenre from "./common/listGenre";
 import paginate from "../utils/paginate";
 import _ from "loadsh";
 import SearchBox from "./common/searchBox";
-class Movies extends Component {
+class Items extends Component {
   state = {
-    movies: [],
+    items: [],
     pageSize: 4,
     currentPage: 1,
     searchQuery: "",
@@ -22,30 +22,30 @@ class Movies extends Component {
   async componentDidMount() {
     const { data } = await getGenres();
     const genres = [{ _id: "", name: "All" }, ...data];
-    const { data: movies } = await getMovies();
-    this.setState({ movies, genres });
+    const { data: items } = await getItems();
+    this.setState({ items, genres });
   }
 
-  handleDelete = (movie) => {
-    const originalMovies = this.state.movies;
-    const movies = originalMovies.filter((m) => m._id !== movie._id);
-    this.setState({ movies });
+  handleDelete = (item) => {
+    const originalItems = this.state.items;
+    const items = originalItems.filter((m) => m._id !== item._id);
+    this.setState({ items });
     try {
-      deleteMovie(movie._id);
+      deleteItem(item._id);
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
         toast.error("this is deleted");
-        this.setState({ movies: originalMovies });
+        this.setState({ items: originalItems });
       }
     }
   };
 
-  handleLike = (movie) => {
-    let movies = [...this.state.movies];
-    const index = movies.indexOf(movie);
-    movies[index] = { ...movies[index] };
-    movies[index].liked = !movies[index].liked;
-    this.setState({ movies });
+  handleLike = (item) => {
+    let items = [...this.state.items];
+    const index = items.indexOf(item);
+    items[index] = { ...items[index] };
+    items[index].liked = !items[index].liked;
+    this.setState({ items });
   };
 
   handlePageChange = (page) => {
@@ -66,39 +66,37 @@ class Movies extends Component {
     const {
       pageSize,
       currentPage,
-      movies: allMovies,
+      items: allItems,
       selectedGenre,
       sortColumn,
       searchQuery,
     } = this.state;
 
-    let filteredMovies = allMovies;
+    let filteredItems = allItems;
     if (searchQuery)
-      filteredMovies = allMovies.filter((m) =>
+      filteredItems = allItems.filter((m) =>
         m.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     else if (selectedGenre && selectedGenre._id)
-      filteredMovies = allMovies.filter(
-        (m) => m.genre._id === selectedGenre._id
-      );
+      filteredItems = allItems.filter((m) => m.genre._id === selectedGenre._id);
 
-    const sortedMovies = _.orderBy(
-      filteredMovies,
+    const sortedItems = _.orderBy(
+      filteredItems,
       [sortColumn.path],
       [sortColumn.order]
     );
 
-    const movies = paginate(sortedMovies, currentPage, pageSize);
+    const items = paginate(sortedItems, currentPage, pageSize);
 
-    return { totalCount: filteredMovies.length, data: movies };
+    return { totalCount: filteredItems.length, data: items };
   };
 
   render() {
-    if (this.state.movies.length === 0) {
-      return <p>there is no movies in the database</p>;
+    if (this.state.items.length === 0) {
+      return <p>there is no Items in the database</p>;
     }
 
-    const { totalCount, data: movies } = this.getPagedData();
+    const { totalCount, data: items } = this.getPagedData();
     return (
       <div className="container ">
         <div className="row">
@@ -113,9 +111,9 @@ class Movies extends Component {
             {this.props.user && (
               <button
                 className="btn btn-primary"
-                onClick={() => this.props.history.push("/movies/new")}
+                onClick={() => this.props.history.push("/Items/new")}
               >
-                New Movie
+                New Item
               </button>
             )}
             <p className="alert alert-primary mt-2">
@@ -125,8 +123,8 @@ class Movies extends Component {
               value={this.state.searchQuery}
               onChange={this.handleSearch}
             ></SearchBox>
-            <MoviesTable
-              movies={movies}
+            <ItemsTable
+              items={items}
               sortColumn={this.state.sortColumn}
               onDelete={this.handleDelete}
               onLikeToggle={this.handleLike}
@@ -145,4 +143,4 @@ class Movies extends Component {
   }
 }
 
-export default Movies;
+export default Items;

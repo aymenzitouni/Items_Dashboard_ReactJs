@@ -2,7 +2,7 @@ import http from "./httpService";
 import jwtDecode from "jwt-decode";
 
 export function login(username, password) {
-  return http.post("http://localhost:3900/api/auth", {
+  return http.post("/auth", {
     email: username,
     password,
   });
