@@ -13,36 +13,43 @@ import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
 import "react-toastify/dist/ReactToastify.css";
 import Logout from "./components/logout";
+import ProtectedRoute from "./components/common/protectedRoute";
+import { getCurrentUser } from "./services/authService";
 
 class App extends Component {
   state = {};
   componentDidMount() {
     try {
-      const jwt = localStorage.getItem("token");
-      const user = jwtDecode(jwt);
+      const user = getCurrentUser();
       this.setState({ user });
       console.log(user);
     } catch (ex) {}
   }
   render() {
+    const { user } = this.state;
     return (
       <React.Fragment>
         <ToastContainer />
-        <Navbar user={this.state.user} />
+        <Navbar user={user} />
         <main className="container">
           <Switch>
+            <ProtectedRoute
+              user={user}
+              path="/movies/:_id"
+              component={MovieForm}
+            />
+            <Route
+              path="/movies"
+              render={(props) => <Movies {...props} user={user} />}
+            />
+            <ProtectedRoute path="/movies/new" component={MovieForm} />
+            <ProtectedRoute path="/customers" component={Customers} />
+            <ProtectedRoute path="/rentals" component={Rentals} />
             <Route path="/login" component={LoginForm} />
             <Route path="/register" component={RegisterForm} />
             <Route path="/logout" component={Logout} />
-
-            <Route path="/movies/:_id" component={MovieForm} />
-            <Route path="/movies/new" component={MovieForm} />
-            <Route path="/movies" component={Movies} />
-            <Route path="/customers" component={Customers} />
-            <Route path="/rentals" component={Rentals} />
             <Route path="/not_Found" component={NotFound} />
             <Redirect from="/" to="/movies"></Redirect>
-
             <Redirect to="/not_found"></Redirect>
           </Switch>
         </main>

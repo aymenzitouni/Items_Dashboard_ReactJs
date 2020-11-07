@@ -110,12 +110,14 @@ class Movies extends Component {
             />
           </div>
           <div className="col-9 mt-5">
-            <button
-              className="btn btn-primary"
-              onClick={() => this.props.history.push("/movies/new")}
-            >
-              New Movie
-            </button>
+            {this.props.user && (
+              <button
+                className="btn btn-primary"
+                onClick={() => this.props.history.push("/movies/new")}
+              >
+                New Movie
+              </button>
+            )}
             <p className="alert alert-primary mt-2">
               there is {totalCount} in the database
             </p>
